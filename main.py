@@ -1,52 +1,62 @@
-import logging
-import json
-import requests
 import pyfiglet
+import phonenumbers
+from phonenumbers import geocoder, timezone
+from datetime import datetime
+import pytz
 
-# Print DAVID in ascii
-print(pyfiglet.figlet_format("DAVID"))
 
-# Set up logging
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s - %(levelname)s - %(message)s')
-
-def get_phone_details(phone_number):
+def track_phone_number(phone_number):
     """
-    This function takes a phone number as an argument and returns a dictionary
-    containing the geo location, name, ISP, and IP associated with the phone number.
-
+    This function takes a phone number in the format +1-XXX-XXX-XXXX and prints DAVID in ascii.
+    It also tracks the phone number and prints the geo location, country code, area code, and line type.
+    Additionally, it prints the current time and date of the location associated with the phone number.
+    
     Args:
-        phone_number (str): The phone number to be tracked.
-
+        phone_number (str): Phone number in the format +1-XXX-XXX-XXXX
+    
     Returns:
-        dict: A dictionary containing the geo location, name, ISP, and IP associated with
-        the phone number.
+        None
     """
-    # Make API request
-    url = f"https://api.phonenumbers.info/phone/{phone_number}"
-    response = requests.get(url)
-    if response.status_code != 200:
-        logging.error(f"Error making API request: {response.status_code}")
-        return None
+    # Print DAVID in ascii
+    print(pyfiglet.figlet_format('DAVID'))
 
-    # Parse response
-    data = json.loads(response.text)
-    details = {
-        "geo_location": data["geo_location"],
-        "name": data["name"],
-        "isp": data["isp"],
-        "ip": data["ip"]
-    }
+    # Validate phone number
+    try:
+        phone_number = phonenumbers.parse(phone_number, None)
+    except phonenumbers.NumberParseException:
+        print('Invalid phone number')
+        return
 
-    return details
+    # Get geo location
+    geo_location = geocoder.description_for_number(phone_number, 'en')
+    print('Geo Location: {}'.format(geo_location))
 
-if __name__ == "__main__":
-    # Get phone number
-    phone_number = input("Please enter a phone number: ")
+    # Get country code
+    country_code = phonenumbers.region_code_for_number(phone_number)
+    print('Country Code: {}'.format(country_code))
 
-    # Get phone details
-    details = get_phone_details(phone_number)
-    if details is not None:
-        print(details)
+    # Get area code
+    location = geocoder.description_for_number(phone_number, 'en', region='US')
+    location_parts = location.split(',')
+    if len(location_parts) > 1:
+        area_code = location_parts[1].strip()
+        print('Area Code: {}'.format(area_code))
     else:
-        logging.error("Error getting phone details")
+        print('Area Code: Not available')
+
+    # Get line type
+    line_type = phonenumbers.number_type(phone_number)
+    print('Line Type: {}'.format(line_type))
+
+    # Get timezone
+    timezone_name = timezone.time_zones_for_number(phone_number)[0]
+    timezone_object = pytz.timezone(timezone_name)
+
+    # Get current time and date of the location
+    timezone_datetime = datetime.now(timezone_object)
+    print('Current time and date: {}'.format(timezone_datetime))
+
+
+if __name__ == '__main__':
+    phone_number = input('Enter phone number in the format +1-XXX-XXX-XXXX: ')
+    track_phone_number(phone_number)

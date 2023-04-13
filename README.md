@@ -23,6 +23,8 @@ DAVID will then retrieve information about the phone number and display it in th
 - Area code
 - Carrier
 - Line type
+## Example 
+![Screenshot (167)](https://user-images.githubusercontent.com/69579338/231783489-607d863d-011f-4c9b-bbb5-938441e2308b.png)
 
 ## Contributing
 If you would like to contribute to DAVID, please open a pull request on this repository. We welcome any contributions that improve the functionality or usability of this tool.

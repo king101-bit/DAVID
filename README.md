@@ -1,7 +1,7 @@
 # DAVID - Phone Number Information Retrieval Tool
 DAVID is a command-line tool written in Python that allows users to retrieve information about phone numbers. This tool can be useful in situations where you need to quickly gather information about a large number of phone numbers.
 
-Installation
+## Installation
 To install DAVID, follow these steps:
 
 Clone this repository to your local machine.

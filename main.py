@@ -4,7 +4,6 @@ from phonenumbers import geocoder, timezone
 from datetime import datetime
 import pytz
 
-
 def track_phone_number(phone_number):
     """
     This function takes a phone number in the format +1-XXX-XXX-XXXX and prints DAVID in ascii.
@@ -36,13 +35,12 @@ def track_phone_number(phone_number):
     print('Country Code: {}'.format(country_code))
 
     # Get area code
-    location = geocoder.description_for_number(phone_number, 'en', region='US')
-    location_parts = location.split(',')
-    if len(location_parts) > 1:
-        area_code = location_parts[1].strip()
+    number_region = phonenumbers.region_code_for_number(phone_number)
+    if number_region == 'US':
+        area_code = phonenumbers.format_number(phonenumbers.parse(str(phone_number), "US"),phonenumbers.PhoneNUmberFormat.NATIONAL)[1:4]
         print('Area Code: {}'.format(area_code))
     else:
-        print('Area Code: Not available')
+        print('Area Code: Not available!')
 
     # Get line type
     line_type = phonenumbers.number_type(phone_number)

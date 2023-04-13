@@ -1,0 +1,12 @@
+name: Greeting
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Greeting
+      run: echo "Hello! Welcome to our project." 

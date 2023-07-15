@@ -1,0 +1,6 @@
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"  # Location of package manifests (e.g., requirements.txt, pyproject.toml)
+    schedule:
+      interval: "weekly"  # Set the update frequency (e.g., daily, weekly, monthly)
